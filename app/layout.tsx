@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Sidebar } from "@/components/Sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Análise de Folha | Colégio Santa Mônica",
-  description: "Dashboard financeiro para análise de folha de pagamento",
+  title: "CSM Manager | Sistema de Gestão Escolar",
+  description: "Dashboard inteligente para gestão escolar global",
 };
 
 export default function RootLayout({
@@ -16,7 +17,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <div className="layout-wrapper">
+          <Sidebar />
+          <main className="main-content">
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
   );
 }
