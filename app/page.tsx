@@ -54,13 +54,13 @@ type TooltipInfo = {
 const TOOLTIPS: TooltipInfo = {
   totalBruto: "Valor total da folha antes de descontos (salário base + adicionais + gratificações)",
   totalLiquido: "Valor líquido a ser pago aos funcionários após todos os descontos",
-  totalINSS: "Total contribuições ao INSS deducted from funcionários",
+  totalINSS: "Total das contribuições ao INSS descontadas dos funcionários",
   media: "Média do custo por funcionário (Bruto / Número de funcionários)",
   evolucao: "Evolução mensal do custo total da folha nos últimos meses",
-  segmento: "Custo total разделенный por segmento escolar",
+  segmento: "Custo total dividido por segmento escolar",
   proporcao: "Porcentagem do custo de cada segmento em relação ao total",
   top10: "Lista dos 10 funcionários com maiores custos brutos",
-  resumoSegmento: "Resumo estatísticas por segmento",
+  resumoSegmento: "Resumo das estatísticas por segmento",
   detalhado: "Lista completa de todos os funcionários com valores detalhados"
 };
 
@@ -315,7 +315,7 @@ export default function Dashboard() {
         <div className="card">
           <div className="metric-label">
             <FileSpreadsheet size={14} /> 
-            Média
+            Média por Func.
             <TooltipIcon text={TOOLTIPS.media} />
           </div>
           <div className="metric-value" style={{ color: "#1e293b" }}>{formatCurrency(stats.avgSalary)}</div>
@@ -346,7 +346,7 @@ export default function Dashboard() {
               <div key={m.mesKey} style={{ textAlign: "center", padding: "0.5rem 1rem", background: i === monthlyStats.length - 1 ? "#dbeafe" : "#f8fafc", borderRadius: "6px" }}>
                 <div style={{ fontSize: "0.75rem", color: "#64748b" }}>{m.mes}</div>
                 <div style={{ fontWeight: 600, color: "#1e293b" }}>{formatCurrency(m.bruto)}</div>
-                <div style={{ fontSize: "0.7rem", color: "#059669" }}>{m.count} func</div>
+                <div style={{ fontSize: "0.7rem", color: "#059669" }}>{m.count} func.</div>
               </div>
             ))}
           </div>
@@ -420,7 +420,7 @@ export default function Dashboard() {
                 <th style={{ padding: "0.4rem", textAlign: "left" }}>Segmento</th>
                 <th style={{ padding: "0.4rem", textAlign: "right" }}>Func.</th>
                 <th style={{ padding: "0.4rem", textAlign: "right" }}>Bruto</th>
-                <th style={{ padding: "0.4rem", textAlign: "right" }}>Part.</th>
+                <th style={{ padding: "0.4rem", textAlign: "right" }}>%</th>
               </tr>
             </thead>
             <tbody>
