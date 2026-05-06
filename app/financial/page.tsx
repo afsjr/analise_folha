@@ -13,7 +13,8 @@ import {
   AlertCircle,
   FileSearch,
   CheckCircle2,
-  Clock
+  Clock,
+  Loader2
 } from "lucide-react";
 
 const TRANSACTIONS = [
@@ -26,8 +27,19 @@ const TRANSACTIONS = [
 
 export default function FinancialDashboard() {
   const [activeTab, setActiveTab] = useState("all");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
   
   const formatCurrency = (val: number) => new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(val);
+
+  const handleProcessNFs = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setShowFeedback(true);
+      setTimeout(() => setShowFeedback(false), 3000);
+    }, 2000);
+  };
 
   return (
     <main className="container animate-fade-in">
@@ -37,9 +49,22 @@ export default function FinancialDashboard() {
           <h1>Contas a Pagar e Receber</h1>
         </div>
         <div style={{ display: "flex", gap: "0.75rem" }}>
-          <button className="card" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <FileSearch size={18} color="var(--primary)" />
-            Processar Notas Fiscais
+          <button 
+            className="card" 
+            onClick={handleProcessNFs}
+            disabled={isProcessing}
+            style={{ 
+              padding: "0.5rem 1rem", 
+              fontSize: "0.875rem", 
+              display: "flex", 
+              alignItems: "center", 
+              gap: "0.5rem",
+              background: isProcessing ? "#f1f5f9" : "#fff",
+              cursor: isProcessing ? "not-allowed" : "pointer"
+            }}
+          >
+            {isProcessing ? <Loader2 size={18} className="animate-spin" /> : <FileSearch size={18} color="var(--primary)" />}
+            {isProcessing ? "Processando..." : "Processar Notas Fiscais"}
           </button>
           <button className="card primary" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <Plus size={18} />
@@ -47,6 +72,30 @@ export default function FinancialDashboard() {
           </button>
         </div>
       </header>
+
+      {showFeedback && (
+        <div style={{
+          position: "fixed",
+          top: "2rem",
+          right: "2rem",
+          background: "var(--success)",
+          color: "white",
+          padding: "1rem 1.5rem",
+          borderRadius: "12px",
+          boxShadow: "var(--shadow-lg)",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.75rem",
+          zIndex: 1000,
+          animation: "fadeIn 0.3s ease-out"
+        }}>
+          <CheckCircle2 size={20} />
+          <div>
+            <p style={{ fontWeight: 700, fontSize: "0.875rem" }}>Sucesso!</p>
+            <p style={{ fontSize: "0.75rem" }}>3 novas notas fiscais foram processadas e adicionadas.</p>
+          </div>
+        </div>
+      )}
 
       {/* Financial Summary */}
       <div className="grid grid-cols-5" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginBottom: "2rem" }}>
@@ -208,7 +257,9 @@ export default function FinancialDashboard() {
               <p style={{ fontWeight: 600 }}>Arraste suas notas aqui</p>
               <p style={{ fontSize: "0.75rem", color: "#64748b" }}>Suporta PDF, JPG e PNG (extração automática via IA)</p>
             </div>
-            <button className="card" style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}>Selecionar Arquivos</button>
+            <button className="card" onClick={handleProcessNFs} disabled={isProcessing} style={{ padding: "0.5rem 1rem", fontSize: "0.875rem" }}>
+              {isProcessing ? "Processando..." : "Selecionar Arquivos"}
+            </button>
           </div>
         </div>
       </div>
